@@ -106,6 +106,9 @@ class WebsiteClassifier:
         Given list of valid webpages with features, compute their classes scores and embedding
         """
         # print(self)
+
+        webpages = [Webpage(w) for w in webpages]
+
         valid_webpages = self.compute_features(webpages)
 
         features_matrix = np.zeros((len(valid_webpages), self.input_dim))
