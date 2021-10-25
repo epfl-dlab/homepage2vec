@@ -8,6 +8,7 @@ from homepage2vec.data_collection import access_website, take_screenshot
 import uuid
 import tempfile
 import os
+import glob
 
 class WebsiteClassifier:
     """
@@ -22,12 +23,15 @@ class WebsiteClassifier:
 
         self.model_path = model_path
 
-        self.temporary_dir = tempfile.gettempdir()+"/screenshots/"
+        self.temporary_dir = tempfile.gettempdir() + "/homepage2vec/"
         print(self.temporary_dir)
 
-        os.makedirs(self.temporary_dir, exist_ok=True)
+        os.makedirs(self.temporary_dir + "/screenshots", exist_ok=True)
 
         # self.temporary_dir="/tmp/screenshots/"
+        files = glob.glob(self.temporary_dir + "/screenshots/*")
+        for f in files:
+            os.remove(f)
 
         self.device = device
         if not device:
@@ -80,7 +84,7 @@ class WebsiteClassifier:
                     w.is_valid = True
 
                     # take screenshot
-                    out_path = self.temporary_dir + str(w.uid)
+                    out_path = self.temporary_dir + "/screenshots/" + str(w.uid)
                     take_screenshot(w.url, out_path)
 
                     # compute textual features
@@ -147,7 +151,6 @@ class WebsiteClassifier:
         return valid_get_code and valid_content_type
 
 
-
 class SimpleClassifier(nn.Module):
     """
     Model architecture of Homepage2Vec
@@ -174,7 +177,7 @@ class SimpleClassifier(nn.Module):
         return x, emb
 
 
-class Webpage():
+class Webpage:
     """
     Shell for a webpage query
     """
