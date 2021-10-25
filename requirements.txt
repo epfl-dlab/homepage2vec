@@ -1,0 +1,6 @@
+torch
+torchvision
+beautifulsoup4
+sentence-transformers
+selenium
+lxml
