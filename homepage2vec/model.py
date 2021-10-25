@@ -101,31 +101,35 @@ class WebsiteClassifier:
 
         return valid_webpages
 
-    def embed_and_predict(self, valid_webpages, h2v):
+    def embed_and_predict(self, webpages):
         """
         Given list of valid webpages with features, compute their classes scores and embedding
         """
+        # print(self)
+        valid_webpages = self.compute_features(webpages)
 
-        features_matrix = np.zeros((len(valid_webpages), h2v.input_dim))
+        features_matrix = np.zeros((len(valid_webpages), self.input_dim))
         for i in range(len(valid_webpages)):
-            features_matrix[i, :] = self.concatenate_features(valid_webpages[i], h2v)
+            features_matrix[i, :] = self.concatenate_features(valid_webpages[i])
 
-        scores, embeddings = h2v.get_scores(torch.FloatTensor(features_matrix))
+        scores, embeddings = self.get_scores(torch.FloatTensor(features_matrix))
         for i in range(len(valid_webpages)):
             valid_webpages[i].embedding = embeddings[i].tolist()
-            valid_webpages[i].scores = dict(zip(h2v.classes, torch.sigmoid(scores[i]).tolist()))
+            valid_webpages[i].scores = dict(zip(self.classes, torch.sigmoid(scores[i]).tolist()))
 
-    def concatenate_features(self, w, h2v):
+        return webpages
+
+    def concatenate_features(self, w):
         """
         Concatenate the features attributes of webpage instance, with respect to the features order in h2v
         """
 
-        v = np.zeros(h2v.input_dim)
+        v = np.zeros(self.input_dim)
 
         ix = 0
 
-        for f_name in h2v.features_order:
-            f_dim = h2v.features_dim[f_name]
+        for f_name in self.features_order:
+            f_dim = self.features_dim[f_name]
             f_value = w.features[f_name]
             if f_value is None:
                 f_value = f_dim * [0]  # if no feature, replace with zeros
