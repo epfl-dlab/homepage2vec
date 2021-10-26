@@ -75,7 +75,7 @@ class VisualExtractor:
         dataloader = torch.utils.data.DataLoader(images_dict, 
                                                  batch_size=self.batch_size, 
                                                  shuffle=False, 
-                                                 num_workers=8,
+                                                 # num_workers=2,
                                                  pin_memory=True)  
 
         print(dataloader.dataset.samples)

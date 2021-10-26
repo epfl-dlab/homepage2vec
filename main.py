@@ -5,3 +5,5 @@ model_path = "/Users/piccardi/repos/multilang-web-embedding/training/results/fin
 model = WebsiteClassifier(model_path=model_path)
 
 webpages = model.embed_and_predict(['www.epfl.ch'])
+
+print(webpages)

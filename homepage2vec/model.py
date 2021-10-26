@@ -9,6 +9,8 @@ import uuid
 import tempfile
 import os
 import glob
+import json
+
 
 class WebsiteClassifier:
     """
@@ -27,6 +29,7 @@ class WebsiteClassifier:
         print(self.temporary_dir)
 
         os.makedirs(self.temporary_dir + "/screenshots", exist_ok=True)
+        os.environ["TOKENIZERS_PARALLELISM"] = "false"
 
         # self.temporary_dir="/tmp/screenshots/"
         files = glob.glob(self.temporary_dir + "/screenshots/*")
@@ -39,7 +42,7 @@ class WebsiteClassifier:
                 self.device = 'cuda:0'
             else:
                 self.device = 'cpu'
-                torch.set_num_threads(24)
+                # torch.set_num_threads(24)
         # load pretrained model
 
         model_tensor = torch.load(self.model_path + "/model.pt", map_location=torch.device(self.device))
@@ -189,3 +192,6 @@ class Webpage:
         self.features = None
         self.embedding = None
         self.scores = None
+
+    def __repr__(self):
+        return json.dumps(self.__dict__)
