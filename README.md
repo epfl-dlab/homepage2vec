@@ -27,7 +27,7 @@ webpages = model.embed_and_predict(['www.nsf.gov'])
 print(webpages[0].scores)
 ```
 
-```json
+```
 {'Arts': 0.018672721460461617, 'Business': 0.01062296237796545,
   'Computers': 0.017558472231030464, 'Games': 1.1537405953276902e-05, 
   'Health': 0.021613001823425293, 'Home': 1.8367260054219514e-05, 
