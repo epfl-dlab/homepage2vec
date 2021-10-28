@@ -8,8 +8,11 @@ from homepage2vec.data_collection import access_website, take_screenshot
 import uuid
 import tempfile
 import os
+from os.path import expanduser
 import glob
 import json
+import urllib.request
+import zipfile
 
 
 class WebsiteClassifier:
@@ -17,13 +20,13 @@ class WebsiteClassifier:
     Pretrained Homepage2vec model
     """
 
-    def __init__(self, model_path, device=None, cpu_threads_count=1, dataloader_workers=1):
+    def __init__(self, device=None, cpu_threads_count=1, dataloader_workers=1):
         self.input_dim = 5177
         self.output_dim = 14
         self.classes = ['Arts', 'Business', 'Computers', 'Games', 'Health', 'Home', 'Kids_and_Teens',
                         'News', 'Recreation', 'Reference', 'Science', 'Shopping', 'Society', 'Sports']
 
-        self.model_path = model_path
+        self.model_path = self.get_model_path()
 
         self.temporary_dir = tempfile.gettempdir() + "/homepage2vec/"
         self.dataloader_workers = dataloader_workers
@@ -64,6 +67,18 @@ class WebsiteClassifier:
         with torch.no_grad():
             self.model.eval()
             return self.model.forward(x)
+
+    def get_model_path(self):
+        MODEL_NAME = "final_1000_100_posw_heldout"
+        model_home = os.path.join(expanduser("~"), '.homepage2vec')
+        os.makedirs(model_home, exist_ok=True)
+        model_folder = os.path.join(model_home, MODEL_NAME)
+        if not os.path.exists(model_folder):
+            filename, headers = urllib.request.urlretrieve(
+                "https://figshare.com/ndownloader/files/31247047?private_link=e664b0204a98a94cfe3c")
+            with zipfile.ZipFile(filename, "r") as zip_ref:
+                zip_ref.extractall(model_home)
+        return model_folder
 
     def compute_features(self, webpages):
         """

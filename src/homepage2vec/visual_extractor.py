@@ -78,10 +78,10 @@ class VisualExtractor:
                                                  num_workers=dataloader_workers,
                                                  pin_memory=True)  
 
-        print(dataloader.dataset.samples)
+        # print(dataloader.dataset.samples)
         # get the uid (file name) of the images
         samples_uid = [x[0].split('/')[-1].split('.')[0].split('-')[0] for x in dataloader.dataset.samples]
-        print(samples_uid)
+        # print(samples_uid)
 
         x = torch.zeros(len(samples_uid), features_dim).to(self.device)
 
