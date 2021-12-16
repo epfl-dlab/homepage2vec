@@ -45,16 +45,18 @@ def access_website(url, timeout=10):
                 'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10.16; rv:84.0) Gecko/20100101 Firefox/84.0',
             })
 
-            r_head = requests.head("http://" + url, timeout=timeout, headers=headers)
-            r_get = requests.get("http://" + url, timeout=timeout, headers=headers)
+            # r_head = requests.head("http://" + url, timeout=timeout, headers=headers)
+            if not url.startswith("http://") and not url.startswith("https:"):
+                url = "http://"+url
+            r_get = requests.get(url, timeout=timeout, headers=headers)
 
-            head_code = r_head.status_code
+            # head_code = r_head.status_code
             get_code = r_get.status_code
             if r_get.encoding.lower() != 'utf-8':
                 r_get.encoding = r_get.apparent_encoding
             text = r_get.text
             content_type = r_get.headers.get('content-type', '?').strip()
-            return text, head_code, get_code, content_type
+            return text, get_code, content_type
 
     except Exception as e:
         return None
@@ -80,7 +82,9 @@ def take_screenshot(url, out_path, in_width=1920, in_height=1080, down_factor=3,
         driver.set_window_size(in_width, in_height)
 
         # access the url
-        driver.get('http://' + url)
+        if not url.startswith("http://") and not url.startswith("https:"):
+            url = "http://" + url
+        driver.get(url)
 
         # set the opacity to 0 for elements that might be popup, etc...
         try:
@@ -110,6 +114,7 @@ def take_screenshot(url, out_path, in_width=1920, in_height=1080, down_factor=3,
         img = img.resize((out_width, out_height), Image.ANTIALIAS)
         img.save(out_path + '.jpeg', optimize=True, quality=quality)
         os.remove(out_path + '.png')
+        return out_path + '.jpeg'
 
     except Exception as e:
         print(e)

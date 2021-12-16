@@ -9,8 +9,12 @@ class TextualExtractor:
     Extract textual features from the html content of a webpage
     """
 
-    def __init__(self, device):
-        self.xlmr = SentenceTransformer('xlm-r-distilroberta-base-paraphrase-v1', device=device)
+    xlmr = None
+
+    def __init__(self, device='cpu'):
+        if not TextualExtractor.xlmr:
+            TextualExtractor.xlmr = SentenceTransformer('paraphrase-xlm-r-multilingual-v1', device=device)
+        # self.xlmr = SentenceTransformer('xlm-r-distilroberta-base-paraphrase-v1', device=device)
         
         # TLD used for one-hot encoding
         self.rep_tld = ['com', 'org', 'net', 'info', 'xyz', 'club', 'biz', 'top', 'edu', 'online', 
@@ -34,7 +38,7 @@ class TextualExtractor:
         features = {}
 
         # url
-        url_feature = embed_url(url, self.xlmr)
+        url_feature = embed_url(url, TextualExtractor.xlmr)
         features['f_url'] = url_feature
 
         # tld 
@@ -48,23 +52,23 @@ class TextualExtractor:
         features['f_metatags'] = metatags_feature
 
         # title
-        title_feature = embed_title(soup, self.xlmr)
+        title_feature = embed_title(soup, TextualExtractor.xlmr)
         features['f_title'] = title_feature
 
         # description
-        description_feature = embed_description(soup, self.xlmr)
+        description_feature = embed_description(soup, TextualExtractor.xlmr)
         features['f_description'] = description_feature
 
         # keywords
-        keywords_feature = embed_keywords(soup, self.xlmr)
+        keywords_feature = embed_keywords(soup, TextualExtractor.xlmr)
         features['f_keywords'] = keywords_feature
 
         # links
-        links_feature = embed_links(soup, self.xlmr, self.k_links)
+        links_feature = embed_links(soup, TextualExtractor.xlmr, self.k_links)
         features['f_links_' + str(self.k_links)] = links_feature
 
         # text
-        text_feature = embed_text(soup, self.xlmr, self.k_sentences)
+        text_feature = embed_text(soup, TextualExtractor.xlmr, self.k_sentences)
         features['f_text_' + str(self.k_sentences)] = text_feature
 
         return features
@@ -142,7 +146,7 @@ def embed_title(soup, transformer):
     title = soup.find('title')
 
     if title is None:
-        return none_output
+        return None
 
     title = str(title.string)
     title = clean_field(title)

@@ -1,7 +1,10 @@
+import logging
+
 import torch
 from torch import nn
 from torch.nn import functional as F
 import numpy as np
+from homepage2vec.model_loader import get_model_path
 from homepage2vec.textual_extractor import TextualExtractor
 from homepage2vec.visual_extractor import VisualExtractor
 from homepage2vec.data_collection import access_website, take_screenshot
@@ -20,35 +23,34 @@ class WebsiteClassifier:
     Pretrained Homepage2vec model
     """
 
-    def __init__(self, device=None, cpu_threads_count=1, dataloader_workers=1):
-        self.input_dim = 5177
+    def __init__(self, visual=False, device=None, cpu_threads_count=1, dataloader_workers=1):
+        self.input_dim = 5177 if visual else 4665
         self.output_dim = 14
         self.classes = ['Arts', 'Business', 'Computers', 'Games', 'Health', 'Home', 'Kids_and_Teens',
                         'News', 'Recreation', 'Reference', 'Science', 'Shopping', 'Society', 'Sports']
 
-        self.model_path = self.get_model_path()
+        self.with_visual = visual
+
+        self.model_home_path, self.model_path = get_model_path(visual)
 
         self.temporary_dir = tempfile.gettempdir() + "/homepage2vec/"
-        self.dataloader_workers = dataloader_workers
-        # print(self.temporary_dir)
-
         os.makedirs(self.temporary_dir + "/screenshots", exist_ok=True)
-        os.environ["TOKENIZERS_PARALLELISM"] = "false"
-
-        # self.temporary_dir="/tmp/screenshots/"
+        # clean screen shorts
         files = glob.glob(self.temporary_dir + "/screenshots/*")
         for f in files:
             os.remove(f)
 
         self.device = device
+        self.dataloader_workers = dataloader_workers
+        os.environ["TOKENIZERS_PARALLELISM"] = "false"
         if not device:
             if torch.cuda.is_available():
                 self.device = 'cuda:0'
             else:
                 self.device = 'cpu'
                 torch.set_num_threads(cpu_threads_count)
-        # load pretrained model
 
+        # load pretrained model
         model_tensor = torch.load(self.model_path + "/model.pt", map_location=torch.device(self.device))
         self.model = SimpleClassifier(self.input_dim, self.output_dim)
         self.model.load_state_dict(model_tensor)
@@ -56,6 +58,7 @@ class WebsiteClassifier:
         # features used in training
         self.features_order = []
         self.features_dim = {}
+        logging.debug("Loading features from {}".format(self.model_path + '/features.txt'))
         with open(self.model_path + '/features.txt', 'r') as file:
             for f in file:
                 name = f.split(' ')[0]
@@ -68,82 +71,39 @@ class WebsiteClassifier:
             self.model.eval()
             return self.model.forward(x)
 
-    def get_model_path(self):
-        MODEL_NAME = "final_1000_100_posw_heldout"
-        model_home = os.path.join(expanduser("~"), '.homepage2vec')
-        os.makedirs(model_home, exist_ok=True)
-        model_folder = os.path.join(model_home, MODEL_NAME)
-        if not os.path.exists(model_folder):
-            filename, headers = urllib.request.urlretrieve(
-                "https://figshare.com/ndownloader/files/31247047?private_link=e664b0204a98a94cfe3c")
-            with zipfile.ZipFile(filename, "r") as zip_ref:
-                zip_ref.extractall(model_home)
-        return model_folder
+    def fetch_website(self, url):
+        logging.debug("Fetching website: {}".format(url))
+        response = access_website(url)
+        w = Webpage(url)
+        if response is not None:
+            html, get_code, content_type = response
+            w.http_code = get_code
+            if self.is_valid(get_code, content_type):
+                w.is_valid = True
+                w.html = html
+        if self.with_visual:
+            logging.debug("Generating screenshot: {}".format(url))
+            out_path = self.temporary_dir + "/screenshots/" + str(w.uid)
+            w.screenshot_path = take_screenshot(w.url, out_path)
+            logging.debug("Screenshot for {} ready in {}".format(url, w.screenshot_path))
+        return w
 
-    def compute_features(self, webpages):
-        """
-        Given list of webpages, computer their textual and visual features and store them in instances attributes.
-        Return a list with valid webpages, whose attributes have been updated.
-        """
-
+    def get_features(self, url, html, screenshot_path):
         te = TextualExtractor(self.device)
-        ve = VisualExtractor(self.device)
+        features = te.get_features(url, html)
+        if self.with_visual:
+            ve = VisualExtractor(self.device)
+            visual_features = ve.get_features(screenshot_path)
+            features['f_visual'] = visual_features
+        return features
 
-        # possible parallelism here for speed-up
-        web_ix = 0
-        for w in webpages:
+    def predict(self, website):
+        website.features = self.get_features(website.url, website.html, website.screenshot_path)
+        all_features = self.concatenate_features(website)
+        input_features = torch.FloatTensor(all_features)
+        scores, embeddings = self.get_scores(input_features)
+        return dict(zip(self.classes, torch.sigmoid(scores).tolist())), embeddings
 
-            w.is_valid = False  # invalid by default
-            response = access_website(w.url)
-
-            if response is not None:
-                html, head_code, get_code, content_type = response
-
-                if self.is_valid(get_code, content_type):
-                    w.is_valid = True
-
-                    # take screenshot
-                    out_path = self.temporary_dir + "/screenshots/" + str(w.uid)
-                    take_screenshot(w.url, out_path)
-
-                    # compute textual features
-                    w.features = te.get_features(w.url, html)
-
-            web_ix += 1
-
-        # compute visual features for all webpages, process screenshots in batches
-        visual_features = ve.get_features(self.temporary_dir, self.dataloader_workers)
-
-        valid_webpages = []
-
-        # retrieve visual features of each webpage
-        for w in webpages:
-            if w.is_valid:
-                w.features['f_visual'] = visual_features[w.uid]
-                valid_webpages.append(w)
-
-        return valid_webpages
-
-    def embed_and_predict(self, webpages):
-        """
-        Given list of valid webpages with features, compute their classes scores and embedding
-        """
-        # print(self)
-
-        webpages = [Webpage(w) for w in webpages]
-
-        valid_webpages = self.compute_features(webpages)
-
-        features_matrix = np.zeros((len(valid_webpages), self.input_dim))
-        for i in range(len(valid_webpages)):
-            features_matrix[i, :] = self.concatenate_features(valid_webpages[i])
-
-        scores, embeddings = self.get_scores(torch.FloatTensor(features_matrix))
-        for i in range(len(valid_webpages)):
-            valid_webpages[i].embedding = embeddings[i].tolist()
-            valid_webpages[i].scores = dict(zip(self.classes, torch.sigmoid(scores[i]).tolist()))
-
-        return webpages
 
     def concatenate_features(self, w):
         """
@@ -204,7 +164,10 @@ class Webpage:
     def __init__(self, url):
         self.url = url
         self.uid = uuid.uuid4().hex
-        self.is_valid = None
+        self.is_valid = False
+        self.http_code = False
+        self.html = None
+        self.screenshot_path = None
         self.features = None
         self.embedding = None
         self.scores = None

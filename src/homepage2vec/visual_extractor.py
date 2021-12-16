@@ -35,13 +35,13 @@ class VisualExtractor:
     Extract visual features from the screenshot of a webpage
     """
     
-    def __init__(self, device):
+    def __init__(self, device='cpu'):
         self.model = ResNetPretrained().to(device)
         self.device = device
         self.batch_size = 128
        
     
-    def get_features(self, folder_path, dataloader_workers):
+    def get_features(self, screenshot_path):
         
         # dimension of the images
         valid_xdim = 640 
