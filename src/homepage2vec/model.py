@@ -102,7 +102,7 @@ class WebsiteClassifier:
         all_features = self.concatenate_features(website)
         input_features = torch.FloatTensor(all_features)
         scores, embeddings = self.get_scores(input_features)
-        return dict(zip(self.classes, torch.sigmoid(scores).tolist())), embeddings
+        return dict(zip(self.classes, torch.sigmoid(scores).tolist())), embeddings.tolist()
 
 
     def concatenate_features(self, w):

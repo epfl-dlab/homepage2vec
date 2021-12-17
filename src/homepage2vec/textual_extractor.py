@@ -45,6 +45,7 @@ class TextualExtractor:
         tld_feature = embed_tld(url, self.rep_tld)
         features['f_tld'] = tld_feature
 
+        # print(html)
         soup = BeautifulSoup(html, 'lxml')
 
         # metatags

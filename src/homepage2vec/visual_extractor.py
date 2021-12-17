@@ -2,7 +2,7 @@ import torch
 import torchvision.models as models
 from torchvision import datasets, transforms
 from torch import nn
-
+from PIL import Image
 
 ###################### CVM ######################
 
@@ -69,41 +69,28 @@ class VisualExtractor:
         data_transforms = transforms.Compose([five_crop, stack_norm_tensorize])
 
 
-        # load images
-        images_dict = datasets.ImageFolder(folder_path, data_transforms)
-
-        dataloader = torch.utils.data.DataLoader(images_dict, 
-                                                 batch_size=self.batch_size, 
-                                                 shuffle=False, 
-                                                 num_workers=dataloader_workers,
-                                                 pin_memory=True)  
+        # # load images
+        # images_dict = datasets.ImageFolder(folder_path, data_transforms)
+        #
+        # dataloader = torch.utils.data.DataLoader(images_dict,
+        #                                          batch_size=self.batch_size,
+        #                                          shuffle=False,
+        #                                          num_workers=dataloader_workers,
+        #                                          pin_memory=True)
 
         # print(dataloader.dataset.samples)
         # get the uid (file name) of the images
-        samples_uid = [x[0].split('/')[-1].split('.')[0].split('-')[0] for x in dataloader.dataset.samples]
+        # samples_uid = [x[0].split('/')[-1].split('.')[0].split('-')[0] for x in dataloader.dataset.samples]
         # print(samples_uid)
 
-        x = torch.zeros(len(samples_uid), features_dim).to(self.device)
+        img = Image.open(screenshot_path)
+        img_tensor = data_transforms(img)
 
         self.model.eval()
-
         with torch.no_grad():
-
-            batch = 0
-
-            for data in dataloader:
-                inputs = data[0].to(self.device)
-                bs, ncrops, c, h, w = inputs.size()
-                outputs = self.model.features(inputs.view(-1, c, h, w)) # output for each crop
-                outputs = outputs.view(bs, ncrops, -1).mean(1) # mean over the crops
-                n_samples = inputs.shape[0]
-
-                x[batch*self.batch_size: batch*self.batch_size + n_samples,:] = outputs.detach()
-
-                del inputs 
-                del outputs
-
-                batch += 1
-
-        return dict(zip(samples_uid, x.tolist()))
+            inputs = img_tensor.to(self.device)
+            ncrops, c, h, w = inputs.size()
+            outputs = self.model.features(inputs.view(-1, c, h, w)) # output for each crop
+            outputs = outputs.view(1, ncrops, -1).mean(1) # mean over the crops
+        return outputs.detach()[0]
 

@@ -1,9 +1,13 @@
+import logging
 from homepage2vec.model import WebsiteClassifier
 
-# model_path = "/Users/piccardi/repos/multilang-web-embedding/training/results/final_1000_100_posw_heldout"
+logging.getLogger().setLevel(logging.DEBUG)
 
-model = WebsiteClassifier(cpu_threads_count=1, dataloader_workers=1)
+model = WebsiteClassifier()
 
-webpages = model.embed_and_predict(['www.nsf.gov'])
+website = model.fetch_website('epfl.ch')
 
-print(webpages[0].scores)
+scores, embeddings = model.predict(website)
+
+print("Classes probabilities:", scores)
+print("Embedding:", embeddings)
