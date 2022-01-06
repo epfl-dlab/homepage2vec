@@ -1,11 +1,29 @@
-# Homepage2Vec - Beta :construction:
+# Homepage2Vec
+
+Language-Agnostic Website Embedding and Classification based on Curlie labels
 
 ---
-Language-Agnostic Website Embedding and Classification
 
-## Getting started
+Homepage2Vec is a pre-trained model that supports the classification and embedding of websites starting from their homepage.
 
-### Setup:
+<p float="left">
+  <img src="images/embedding_tsne.png" width="250" />
+  <img src="images/domain_names_tsne.png" width="250" /> 
+</p>
+
+**Left:** _Projection in two dimensions with t-SNE of the embedding of 5K random samples of the testing set. Colors represent the 14 classes._ **Right:** _The projection with t-SNE of some popular websites shows that embedding vectors effectively capture website topics._
+
+## Curlie Dataset
+
+We release the full training dataset obtained from Curlie. The dataset contains the original labels, labels aligned to English, fetched HTML pages.
+
+Get it here: [https://doi.org/10.6084/m9.figshare.16621669](https://doi.org/10.6084/m9.figshare.16621669)
+
+
+## Getting started with the library
+
+
+### Installation:
 
 Step 1: install the library with pip.
 ```
@@ -50,3 +68,25 @@ Embedding: [-4.596550941467285, 1.0690114498138428, 2.1633379459381104,
  1.6420538425445557, -1.918184757232666, 1.227172613143921, 0.4358430504798889, 
  ...]
 ```
+
+The library automatically downloads the pre-trained models homepage2vec and XLM-R at the first usage.
+
+### Using visual features
+
+If you wish to use the prediction using the visual features, Homepage2vec needs to take a screenshot of the website. This means you need a working copy of Selenium and the Chrome browser. Please note that as reported in the reference paper, the performance improvement is limited.
+
+Install the [Selenium Chrome web driver](https://chromedriver.chromium.org/downloads), and add the folder to the system $PATH variable. You need a local copy of Chrome browser (See [Getting started](https://chromedriver.chromium.org/getting-started)).
+
+
+## Getting involved
+
+We invite contributions to Homepage2Vec! Please open a [pull request](https://github.com/epfl-dlab/homepage2vec/pulls) if you have any suggestions.
+
+
+## Original publication
+
+**Language-Agnostic Website Embedding and Classification**
+
+Sylvain Lugeon, Tiziano Piccardi, Robert West
+
+_Currently, publicly available models for website classification do not offer an embedding method and have limited support for languages beyond English. We release a dataset with more than 1M websites in 92 languages with relative labels collected from Curlie, the largest multilingual crowdsourced Web directory. The dataset contains 14 website categories aligned across languages. Alongside it, we introduce Homepage2Vec, a machine-learned pre-trained model for classifying and embedding websites based on their homepage in a language-agnostic way. Homepage2Vec, thanks to its feature set (textual content, metadata tags, and visual attributes) and recent progress in natural language representation, is language-independent by design and can generate embeddings representation. We show that Homepage2Vec correctly classifies websites with a macro-averaged F1-score of 0.90, with stable performance across low- as well as high-resource languages. Feature analysis shows that a small subset of efficiently computable features suffices to achieve high performance even with limited computational resources._

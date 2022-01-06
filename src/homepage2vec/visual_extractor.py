@@ -6,7 +6,6 @@ from PIL import Image
 
 ###################### CVM ######################
 
-
 out_dim = 14 # number of classes
 features_dim = 512 # number of features before the classifier
 
@@ -67,21 +66,6 @@ class VisualExtractor:
 
         # final transform: crop > tensorize > normalize
         data_transforms = transforms.Compose([five_crop, stack_norm_tensorize])
-
-
-        # # load images
-        # images_dict = datasets.ImageFolder(folder_path, data_transforms)
-        #
-        # dataloader = torch.utils.data.DataLoader(images_dict,
-        #                                          batch_size=self.batch_size,
-        #                                          shuffle=False,
-        #                                          num_workers=dataloader_workers,
-        #                                          pin_memory=True)
-
-        # print(dataloader.dataset.samples)
-        # get the uid (file name) of the images
-        # samples_uid = [x[0].split('/')[-1].split('.')[0].split('-')[0] for x in dataloader.dataset.samples]
-        # print(samples_uid)
 
         img = Image.open(screenshot_path)
         img_tensor = data_transforms(img)
