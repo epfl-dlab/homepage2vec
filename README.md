@@ -13,9 +13,9 @@ Homepage2Vec is a pre-trained model that supports the classification and embeddi
 
 **Left:** _Projection in two dimensions with t-SNE of the embedding of 5K random samples of the testing set. Colors represent the 14 classes._ **Right:** _The projection with t-SNE of some popular websites shows that embedding vectors effectively capture website topics._
 
-## Curlie Dataset
+## Curated Curlie Dataset
 
-We release the full training dataset obtained from Curlie. The dataset contains the original labels, labels aligned to English, fetched HTML pages.
+We release the full training dataset obtained from Curlie. The dataset includes the websites (online in April 2021) with the URL recognized as homepage, and it contains the original labels, the labels aligned to English, and the fetched HTML pages.
 
 Get it here: [https://doi.org/10.6084/m9.figshare.16621669](https://doi.org/10.6084/m9.figshare.16621669)
 
@@ -90,3 +90,10 @@ We invite contributions to Homepage2Vec! Please open a [pull request](https://gi
 Sylvain Lugeon, Tiziano Piccardi, Robert West
 
 _Currently, publicly available models for website classification do not offer an embedding method and have limited support for languages beyond English. We release a dataset with more than 1M websites in 92 languages with relative labels collected from Curlie, the largest multilingual crowdsourced Web directory. The dataset contains 14 website categories aligned across languages. Alongside it, we introduce Homepage2Vec, a machine-learned pre-trained model for classifying and embedding websites based on their homepage in a language-agnostic way. Homepage2Vec, thanks to its feature set (textual content, metadata tags, and visual attributes) and recent progress in natural language representation, is language-independent by design and can generate embeddings representation. We show that Homepage2Vec correctly classifies websites with a macro-averaged F1-score of 0.90, with stable performance across low- as well as high-resource languages. Feature analysis shows that a small subset of efficiently computable features suffices to achieve high performance even with limited computational resources._
+
+## License
+
+Creative Commons Attribution 3.0 Unported License - [Curlie](https://curlie.org/docs/en/license.html)
+
+Learn more how to contribute: https://curlie.org/docs/en/about.html
+
