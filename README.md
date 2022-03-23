@@ -18,7 +18,7 @@ Homepage2Vec is a pre-trained model that supports the classification and embeddi
 
 We release the full training dataset obtained from Curlie. The dataset includes the websites (online in April 2021) with the URL recognized as homepage, and it contains the original labels, the labels aligned to English, and the fetched HTML pages.
 
-Get it here: [https://doi.org/10.6084/m9.figshare.16621669](https://doi.org/10.6084/m9.figshare.16621669)
+Get it here: [https://doi.org/10.6084/m9.figshare.19406693](https://doi.org/10.6084/m9.figshare.19406693)
 
 
 ## Getting started with the library
