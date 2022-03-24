@@ -4,8 +4,8 @@ import zipfile
 from os.path import expanduser
 import logging
 
-model_with_visual_url = "https://figshare.com/ndownloader/files/31715093"
-model_without_visual_url = "https://figshare.com/ndownloader/files/31715051"
+model_with_visual_url = "https://figshare.com/ndownloader/files/34494836"
+model_without_visual_url = "https://figshare.com/ndownloader/files/34494839"
 
 
 def get_model_path(visual=False):
