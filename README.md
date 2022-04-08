@@ -3,6 +3,8 @@
 Language-Agnostic Website Embedding and Classification based on Curlie labels
 [https://arxiv.org/pdf/2201.03677.pdf](https://arxiv.org/pdf/2201.03677.pdf)
 
+Published @ International AAAI Conference on Web and Social Media (ICWSM)
+
 ---
 
 Homepage2Vec is a pre-trained model that supports the classification and embedding of websites starting from their homepage.
@@ -90,9 +92,30 @@ We invite contributions to Homepage2Vec! Please open a [pull request](https://gi
 
 Sylvain Lugeon, Tiziano Piccardi, Robert West
 
-_Currently, publicly available models for website classification do not offer an embedding method and have limited support for languages beyond English. We release a dataset with more than 1M websites in 92 languages with relative labels collected from Curlie, the largest multilingual crowdsourced Web directory. The dataset contains 14 website categories aligned across languages. Alongside it, we introduce Homepage2Vec, a machine-learned pre-trained model for classifying and embedding websites based on their homepage in a language-agnostic way. Homepage2Vec, thanks to its feature set (textual content, metadata tags, and visual attributes) and recent progress in natural language representation, is language-independent by design and can generate embeddings representation. We show that Homepage2Vec correctly classifies websites with a macro-averaged F1-score of 0.90, with stable performance across low- as well as high-resource languages. Feature analysis shows that a small subset of efficiently computable features suffices to achieve high performance even with limited computational resources._
+_Currently, publicly available models for website classification do not offer an embedding method and have limited support for languages beyond English. We release a dataset of more than two million category-labeled websites in 92 languages collected from Curlie, the largest multilingual human-edited Web directory. The dataset contains 14 website categories aligned across languages. Alongside it, we introduce Homepage2Vec, a machine-learned pre-trained model for classifying and embedding websites based on their homepage in a language-agnostic way. Homepage2Vec, thanks to its feature set (textual content, metadata tags, and visual attributes) and recent progress in natural language representation, is language-independent by design and generates embedding-based representations. We show that Homepage2Vec correctly classifies websites with a macro-averaged F1-score of 0.90, with stable performance across low- as well as high-resource languages. Feature analysis shows that a small subset of efficiently computable features suffices to achieve high performance even with limited computational resources. We make publicly available the curated Curlie dataset aligned across languages, the pre-trained Homepage2Vec model, and libraries._
 
 [https://arxiv.org/pdf/2201.03677.pdf](https://arxiv.org/pdf/2201.03677.pdf)
+
+
+## Citation format
+
+If you found the provided resources useful, please cite the paper:
+
+**BibTex**
+```
+@inproceedings{lugeon2022language,
+  title={Language-Agnostic Website Embedding and Classification},
+  author={Lugeon, Sylvain and Piccardi, Tiziano and West, Robert},
+  booktitle={Proceedings of the International AAAI Conference on Web and Social Media},
+  year={2022}
+}
+```
+
+**Chicago**
+```
+Lugeon, Sylvain, Tiziano Piccardi, and Robert West. "Language-Agnostic Website Embedding and Classification."\
+In Proceedings of the International AAAI Conference on Web and Social Media, 2022
+```
 
 ## Dataset License
 
