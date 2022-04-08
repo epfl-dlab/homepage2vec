@@ -113,9 +113,7 @@ If you found the provided resources useful, please cite the paper:
 
 **Chicago**
 ```
-Lugeon, Sylvain, Tiziano Piccardi, and Robert West. 
-"Language-Agnostic Website Embedding and Classification."
-In Proceedings of the International AAAI Conference on Web and Social Media, 2022
+Lugeon, Sylvain, Tiziano Piccardi, and Robert West. "Language-Agnostic Website Embedding and Classification." In Proceedings of the International AAAI Conference on Web and Social Media, 2022
 ```
 
 ## Dataset License
