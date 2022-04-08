@@ -1,6 +1,6 @@
 # Homepage2Vec
 
-Language-Agnostic Website Embedding and Classification based on Curlie labels
+Homepage2Vec: Language-Agnostic Website Embedding and Classification based on Curlie labels
 [https://arxiv.org/pdf/2201.03677.pdf](https://arxiv.org/pdf/2201.03677.pdf)
 
 Published @ International AAAI Conference on Web and Social Media (ICWSM)
@@ -88,7 +88,7 @@ We invite contributions to Homepage2Vec! Please open a [pull request](https://gi
 
 ## Original publication
 
-**Language-Agnostic Website Embedding and Classification**
+**Homepage2Vec: Language-Agnostic Website Embedding and Classification**
 
 Sylvain Lugeon, Tiziano Piccardi, Robert West
 
@@ -104,7 +104,7 @@ If you found the provided resources useful, please cite the paper:
 **BibTex**
 ```
 @inproceedings{lugeon2022language,
-  title={Language-Agnostic Website Embedding and Classification},
+  title={Homepage2Vec: Language-Agnostic Website Embedding and Classification},
   author={Lugeon, Sylvain and Piccardi, Tiziano and West, Robert},
   booktitle={Proceedings of the International AAAI Conference on Web and Social Media},
   year={2022}
@@ -113,7 +113,7 @@ If you found the provided resources useful, please cite the paper:
 
 **Chicago**
 ```
-Lugeon, Sylvain, Tiziano Piccardi, and Robert West. "Language-Agnostic Website Embedding and Classification." In Proceedings of the International AAAI Conference on Web and Social Media, 2022
+Lugeon, Sylvain, Tiziano Piccardi, and Robert West. "Homepage2Vec: Language-Agnostic Website Embedding and Classification." In Proceedings of the International AAAI Conference on Web and Social Media, 2022
 ```
 
 ## Dataset License
