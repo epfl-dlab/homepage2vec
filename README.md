@@ -56,6 +56,16 @@ scores, embeddings = model.predict(website)
 print("Classes probabilities:", scores)
 print("Embedding:", embeddings)
 ```
+
+Or if you have the HTML document already downloaded:
+```python
+website = Webpage()
+website.html = "..."
+website.url = "..."
+website.screenshot_path = "..." # optional
+scores, embeddings = model.predict(website)
+```
+
 Result:
 ```
 Classes probabilities: {'Arts': 0.3674524128437042, 'Business': 0.0720655769109726,
