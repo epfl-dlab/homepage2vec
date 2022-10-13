@@ -59,9 +59,8 @@ print("Embedding:", embeddings)
 
 Or if you have the HTML document already downloaded:
 ```python
-website = Webpage()
+website = Webpage("<url>")
 website.html = "..."
-website.url = "..."
 website.screenshot_path = "..." # optional
 scores, embeddings = model.predict(website)
 ```
