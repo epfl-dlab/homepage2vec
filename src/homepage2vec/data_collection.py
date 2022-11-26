@@ -1,15 +1,18 @@
 import requests
-
 import time
-
-from selenium import webdriver
-from selenium.common.exceptions import WebDriverException
-
-from PIL import Image
 import os
-
 import signal
+from PIL import Image
 from contextlib import contextmanager
+from importlib.util import find_spec
+
+# import selenium if exists
+selenium_module = find_spec('selenium')
+if selenium_module is None:
+    pass
+else:
+    from selenium import webdriver
+    from selenium.common.exceptions import WebDriverException
 
 
 class TimeoutException(Exception): pass
