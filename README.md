@@ -26,9 +26,9 @@ Get it here: [https://doi.org/10.6084/m9.figshare.19406693](https://doi.org/10.6
 ## Getting started with the library
 
 
-### Basic installation:
+### Installation:
 
-Simply install the library with pip:
+Install the library with pip:
 ```
 pip install homepage2vec
 ```
