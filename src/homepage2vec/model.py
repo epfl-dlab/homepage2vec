@@ -11,11 +11,10 @@ from homepage2vec.data_collection import access_website, take_screenshot
 import uuid
 import tempfile
 import os
-from os.path import expanduser
 import glob
 import json
-import urllib.request
-import zipfile
+from importlib.util import find_spec
+
 
 
 class WebsiteClassifier:
@@ -29,6 +28,8 @@ class WebsiteClassifier:
         self.classes = ['Arts', 'Business', 'Computers', 'Games', 'Health', 'Home', 'Kids_and_Teens',
                         'News', 'Recreation', 'Reference', 'Science', 'Shopping', 'Society', 'Sports']
 
+        if find_spec('selenium') is None and visual is True:
+            raise RuntimeError('Visual flag requires the installation of the selenium package')
         self.with_visual = visual
 
         self.model_home_path, self.model_path = get_model_path(visual)

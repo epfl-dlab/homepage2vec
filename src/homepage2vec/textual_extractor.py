@@ -1,7 +1,6 @@
 import re
 from bs4 import BeautifulSoup
 from sentence_transformers import SentenceTransformer
-# import pandas as pd
 from collections import Counter
 
 class TextualExtractor:

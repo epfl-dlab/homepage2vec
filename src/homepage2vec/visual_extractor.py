@@ -1,6 +1,6 @@
 import torch 
-import torchvision.models as models
-from torchvision import datasets, transforms
+from torchvision.models import resnet18, ResNet18_Weights
+from torchvision import transforms
 from torch import nn
 from PIL import Image
 
@@ -13,7 +13,7 @@ class ResNetPretrained(nn.Module):
     def __init__(self):
         super(ResNetPretrained, self).__init__()
         
-        resnet = models.resnet18(pretrained=True)
+        resnet = resnet18(weights=ResNet18_Weights.DEFAULT)
         
         self.features = torch.nn.Sequential(*list(resnet.children())[:-1])       
         self.fc1 = torch.nn.Linear(features_dim, out_dim)

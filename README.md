@@ -28,10 +28,12 @@ Get it here: [https://doi.org/10.6084/m9.figshare.19406693](https://doi.org/10.6
 
 ### Installation:
 
-Step 1: install the library with pip.
+Install the library with pip:
 ```
 pip install homepage2vec
 ```
+Note: Despite being optimized for GPUs, you can restrict the installation to a CPU-only usage with the flag ```--extra-index-url https://download.pytorch.org/whl/cpu``` during the pip installation.
+
 
 [//]: # ()
 [//]: # ([Optional] Step 2: Install the [Selenium Chrome web driver]&#40;https://chromedriver.chromium.org/downloads&#41;, and add the folder to the system $PATH variable.)
@@ -87,7 +89,9 @@ The library automatically downloads the pre-trained models homepage2vec and XLM-
 
 If you wish to use the prediction using the visual features, Homepage2vec needs to take a screenshot of the website. This means you need a working copy of Selenium and the Chrome browser. Please note that as reported in the reference paper, the performance improvement is limited.
 
-Install the [Selenium Chrome web driver](https://chromedriver.chromium.org/downloads), and add the folder to the system $PATH variable. You need a local copy of Chrome browser (See [Getting started](https://chromedriver.chromium.org/getting-started)).
+1) Install the visual package of homepage2vec with ```pip install homepage2vec[visual]```.
+2) Install the [Selenium Chrome web driver](https://chromedriver.chromium.org/downloads), and add the folder to the system $PATH variable.
+3) You need a local copy of Chrome browser (See [Getting started](https://chromedriver.chromium.org/getting-started)).
 
 
 ## Getting involved
