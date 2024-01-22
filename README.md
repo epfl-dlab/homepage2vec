@@ -135,3 +135,6 @@ Creative Commons Attribution 3.0 Unported License - [Curlie](https://curlie.org/
 
 Learn more how to contribute: https://curlie.org/docs/en/about.html
 
+## Further development
+Please check this repository for an extension of Homepage2vec: https://github.com/CS-433/ml-project-2-mlp
+
